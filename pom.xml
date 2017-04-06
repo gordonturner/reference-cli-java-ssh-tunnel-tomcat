@@ -10,16 +10,128 @@
   <name>reference-cli-java-ssh-tunnel</name>
   <url>http://maven.apache.org</url>
 
+  <scm>
+    <!-- NOTE: Add server configuration for id `github.com` to settings.xml -->
+    <connection>scm:git:git@github.com/gordonturner:reference-cli-java-ssh-tunnel.git</connection>
+    <url>scm:git:git@github.com:gordonturner/reference-cli-java-ssh-tunnel.git</url>
+    <developerConnection>scm:git:git@github.com:gordonturner/reference-cli-java-ssh-tunnel.git</developerConnection>
+    <tag>master</tag>
+  </scm>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <jackson.version>1.9.2</jackson.version>
   </properties>
 
   <dependencies>
+
+    <!-- BEGIN Common Dependencies -->
+
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.5</version>
     </dependency>
+
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
+      <version>4.5.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpmime</artifactId>
+      <version>4.5.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.17</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-jaxrs</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.codehaus.jackson</groupId>
+      <artifactId>jackson-xc</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.2.1</version>
+    </dependency>
+
+    <!-- END Common Dependencies -->
+
+    <!-- BEGIN SSH -->
+
+    <dependency>
+      <groupId>com.jcraft</groupId>
+      <artifactId>jsch</artifactId>
+      <version>0.1.54</version>
+    </dependency>
+
+    <!-- END SSH -->
+
   </dependencies>
+
+  <build>
+    <finalName>reference-cli-java-ssh-tunnel</finalName>
+
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+     </resource>
+    </resources>
+
+    <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3.2</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-scm-plugin</artifactId>
+        <version>1.9</version>
+      </plugin>
+
+    </plugins>
+
+  </build>
+
+  <repositories>
+
+    <repository>
+      <id>Central</id>
+      <url>http://repo1.maven.org/maven2/</url>
+    </repository>
+
+    <repository>
+      <id>jboss</id>
+      <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+    </repository>
+
+    <repository>
+      <id>ibiblio mirror</id>
+      <url>http://mirrors.ibiblio.org/maven2</url>
+    </repository>
+
+  </repositories>
+
 </project>
