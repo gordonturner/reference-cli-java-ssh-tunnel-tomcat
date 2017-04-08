@@ -80,7 +80,7 @@ public class App {
     Session session = null;
     Session[] sessions = new Session[2];
     
-    // Create JSch object and set AWS pem key
+    // Create JSch object and set pem key
     JSch jsch = new JSch();
     jsch.addIdentity(sshKeyFile);
     jsch.setConfig(STRICT_HOST_KEY_CHECKING_KEY, STRICT_HOST_KEY_CHECKING_VALUE);
