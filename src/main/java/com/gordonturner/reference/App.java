@@ -48,24 +48,35 @@ public class App {
     
     // TODO: Load properties from configuration file
     
+    
+    /*
+     * BEGIN required customization
+     */
+    
     // Properties for tunnel and server
     String sshHost1 = "JUMP_BOX";
     String sshUser1 = "ubuntu";
     String sshHost2 = "REMOTE_SERVER";
     String sshuser2 = "ubuntu";
+
+    // NOTE: Shared key file between sshHost1 and sshHost2, common for providers like AWS.
+    String sshKeyFile = "ssh-key.pem";
     
     // Properties for Tomcat
     String tomcatUsername = "admin";
     String tomcatPassword = "SEEKRIT";
+    int tomcatPort = 8080;
     
     // NOTE: hard coding `example-web` path to match `/tmp/example-web.war` file
     
     String tomcatUploadUrl = "http://localhost:8080/manager/text/deploy?path=/example-web&update=true";
     String tomcatUploadFile = "/tmp/example-web.war";
     
-    // NOTE: Shared key file between sshHost1 and sshHost2, common for providers like AWS.
-    String sshKeyFile = "ssh-key.pem";
+    /*
+     * END required customization
+     */
     
+     
     Session session = null;
     Session[] sessions = new Session[2];
     
@@ -95,8 +106,8 @@ public class App {
     
     // Set port forwarding hop 2
     logger.info("Attempting to start port forwarding");
-    int assignedPort2 = session.setPortForwardingL(4502, "127.0.0.1", 4502);
-    logger.info("Completed port forwarding  localhost: 4502 -> 127.0.0.1:4502");
+    int assignedPort2 = session.setPortForwardingL(tomcatPort, "127.0.0.1", tomcatPort);
+    logger.info("Completed port forwarding  localhost: " + tomcatPort + " -> 127.0.0.1:" + tomcatPort );
     
     Channel channel = session.openChannel(CHANNEL_TYPE);
     channel.connect();
