@@ -22,13 +22,13 @@ import java.io.IOException;
 /**
  * The jumpbox should be reachable via:
  *
- * ssh -i reference.pem ubuntu@JUMP_BOX
+ * ssh -i ssh-key.pem USERNAME@JUMP_BOX
  *
  * And then from the JUMP_BOX the REMOTE_SERVER should be reachable via:
  *
- * ssh -i reference.pem ubuntu@REMOTE_SERVER
+ * ssh -i ssh-key.pem USERNAME@REMOTE_SERVER
  *
- * Where the `reference.pem` is the ssh key file for each.
+ * Where the `ssh-key.pem` is the ssh key file for each.
  *
  */
 public class App {
@@ -55,9 +55,9 @@ public class App {
     
     // Properties for tunnel and server
     String sshHost1 = "JUMP_BOX";
-    String sshUser1 = "ubuntu";
+    String sshUser1 = "USERNAME";
     String sshHost2 = "REMOTE_SERVER";
-    String sshuser2 = "ubuntu";
+    String sshuser2 = "USERNAME";
 
     // NOTE: Shared key file between sshHost1 and sshHost2, common for providers like AWS.
     String sshKeyFile = "ssh-key.pem";
