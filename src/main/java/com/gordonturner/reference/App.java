@@ -8,7 +8,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.auth.AuthenticationException;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.auth.BasicScheme;
@@ -53,8 +53,15 @@ public class App {
     String sshUser1 = "ubuntu";
     String sshHost2 = "REMOTE_SERVER";
     String sshuser2 = "ubuntu";
-    String uploadUrl = "http://manager:manager@localhost:8080/manager/text/deploy?path=/example-web&update=true";
-    String uploadFile = "/tmp/example-web.war";
+    
+    // Properties for Tomcat
+    String tomcatUsername = "admin";
+    String tomcatPassword = "SEEKRIT";
+    
+    // NOTE: hard coding `example-web` path to match `/tmp/example-web.war` file
+    
+    String tomcatUploadUrl = "http://localhost:8080/manager/text/deploy?path=/example-web&update=true";
+    String tomcatUploadFile = "/tmp/example-web.war";
     
     // NOTE: Shared key file between sshHost1 and sshHost2, common for providers like AWS.
     String sshKeyFile = "ssh-key.pem";
@@ -94,24 +101,30 @@ public class App {
     Channel channel = session.openChannel(CHANNEL_TYPE);
     channel.connect();
 
-    // Begin Http POST, equivalent to:
-    // curl -T "example-web.war" "http://manager:manager@localhost:8080/manager/text/deploy?path=/example-web&update=true"
+    // For Tomcat 7, running the manager webapp.
+    //
+    // Command line call is:
+    //
+    // curl -X PUT \
+    // --user root:password \
+    // -T "example-web.war" \
+    // "http://manager:manager@localhost:8080/manager/text/deploy?path=/example-web&update=true"
   
-    logger.debug("Attempting to upload file: " + uploadFile);
-    logger.debug("Attempting to upload to:   " + uploadUrl );
+    logger.debug("Attempting to upload file: " + tomcatUploadFile);
+    logger.debug("Attempting to upload to:   " + tomcatUploadUrl );
   
     CloseableHttpClient httpclient = HttpClients.createDefault();
-    HttpPost httpPost = new HttpPost(uploadUrl);
+    HttpPut httpPut = new HttpPut(tomcatUploadUrl);
     MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-    UsernamePasswordCredentials credentials= new UsernamePasswordCredentials("admin", "admin");
-    httpPost.addHeader(new BasicScheme().authenticate(credentials, httpPost, null));
-    File file = new File( uploadFile );
-    builder.addBinaryBody( "file", file, ContentType.APPLICATION_OCTET_STREAM, uploadFile );
+    UsernamePasswordCredentials credentials= new UsernamePasswordCredentials(tomcatUsername, tomcatPassword);
+    httpPut.addHeader(new BasicScheme().authenticate(credentials, httpPut, null));
+    File file = new File( tomcatUploadFile );
+    builder.addBinaryBody( "file", file, ContentType.APPLICATION_OCTET_STREAM, tomcatUploadFile );
     HttpEntity multipart = builder.build();
-    httpPost.setEntity(multipart);
+    httpPut.setEntity(multipart);
     
     // Execute http post request
-    CloseableHttpResponse response = httpclient.execute(httpPost);
+    CloseableHttpResponse response = httpclient.execute(httpPut);
     
     // Evaluate response
     logger.debug("Request status:" + response.getStatusLine());
@@ -121,16 +134,16 @@ public class App {
       httpclient.close();
     
       logger.error("Request was not 200 OK, ");
-      logger.debug("Failed to upload file: " + uploadFile);
-      logger.debug("Failed to upload to:   " + uploadUrl );
+      logger.debug("Failed to upload file: " + tomcatUploadFile);
+      logger.debug("Failed to upload to:   " + tomcatUploadUrl );
     }
     else
     {
       response.close();
       httpclient.close();
     
-      logger.debug("Completed uploading file: " + uploadFile);
-      logger.debug("Completed uploading to:   " + uploadUrl );
+      logger.debug("Completed uploading file: " + tomcatUploadFile);
+      logger.debug("Completed uploading to:   " + tomcatUploadUrl );
     }
     
     // Close tunnel

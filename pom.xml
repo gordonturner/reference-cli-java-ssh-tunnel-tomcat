@@ -8,7 +8,6 @@
   <packaging>jar</packaging>
 
   <name>reference-cli-java-ssh-tunnel</name>
-  <url>http://maven.apache.org</url>
 
   <scm>
     <!-- NOTE: Add server configuration for id `github.com` to settings.xml -->
@@ -111,6 +110,29 @@
         <version>1.9</version>
       </plugin>
 
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>3.0.0</version>
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+          <archive>
+            <manifest>
+              <mainClass>com.gordonturner.reference.App</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
 
   </build>
