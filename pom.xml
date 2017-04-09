@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.gordonturner</groupId>
-  <artifactId>reference-cli-java-ssh-tunnel</artifactId>
+  <artifactId>reference-cli-java-ssh-tunnel-tomcat</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>reference-cli-java-ssh-tunnel</name>
+  <name>reference-cli-java-ssh-tunnel-tomcat</name>
 
   <scm>
     <!-- NOTE: Add server configuration for id `github.com` to settings.xml -->
@@ -83,7 +83,6 @@
   </dependencies>
 
   <build>
-    <finalName>reference-cli-java-ssh-tunnel</finalName>
 
     <resources>
       <resource>
